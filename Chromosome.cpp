@@ -6,21 +6,31 @@
 #include <random>
 #include <iostream>
 #include <ctime>
+#include <algorithm>
 
-
-Chromosome::Chromosome(int size, int MaxDur, double prob_cross) {
-    this->number_of_genes = size * 2;
+Chromosome::Chromosome(int number_of_operations, int MaxDur, double prob_cross) {
+    this->number_of_genes = number_of_operations * 2;
     this->max_dur = MaxDur;
     this->probability_of_crossing = prob_cross;
 
-    genes.reserve(size * 2);
-    std::mt19937_64 rng(size);
+    genes.reserve(number_of_operations * 2);
+    std::mt19937_64 rng(number_of_operations);
     std::uniform_real_distribution<double> dist(0, 1);
 
-    for (size_t i = 0; i < size; ++i) {
+    for (size_t i = 0; i < number_of_operations; ++i) {
         genes[i] = dist(rng);
-        genes[i + size] = genes[i] * 1.5 * max_dur;
+        genes[i + number_of_operations] = genes[i] * 1.5 * max_dur;
     }
+}
+
+Chromosome::Chromosome(const Chromosome &other) {
+    this->number_of_genes = other.get_size();
+    this->max_dur = other.get_max_dur();
+    this->probability_of_crossing = other.get_prob_cross();
+
+    genes.reserve(number_of_genes);
+    std::copy(other.genes.begin(), other.genes.end(), genes.begin());
+
 }
 
 
@@ -39,16 +49,4 @@ Chromosome Chromosome::cross(Chromosome &one, Chromosome &two) {
         }
     }
     return return_chromosome;
-}
-
-
-int Chromosome::cost_function(Chromosome &item) {
-    // it takes as the input the chromosome
-    // the return is the makespan of the schedule
-    // obtained by using this chromosome
-
-    // I need to construct the schedule
-    // apply to the obtained schedule local search
-    // procedure, and return the makespan of the schedule
-    return 1;
 }

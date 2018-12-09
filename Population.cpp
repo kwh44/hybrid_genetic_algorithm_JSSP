@@ -5,32 +5,44 @@
 #include "Population.h"
 #include <algorithm>
 #include <random>
-#include <iostream>
 #include <ctime>
 
-Population::Population(int size, int MaxDur, double prob_cross) {
+static int _max(std::vector<std::vector<int> > &data);
+
+
+Population::Population(int size, double prob_cross, std::vector<std::vector<int> > & data) {
+    this->_schedule = Schedule(data);
     this->population_size = size;
     this->population_array.reserve(size);
     for (size_t i = 0; i < size; ++i) {
-        population_array.emplace_back(Chromosome(size, MaxDur, prob_cross));
+        population_array.emplace_back(Chromosome(data.size() * (data[0].size() / 2), _max(data), prob_cross));
     }
 }
 
+static int _max(std::vector<std::vector<int> > &data) {
+    int duration = 0;
+    for (size_t i = 0; i < data.size(); ++i) {
+        for (size_t j = 1; j < data[0].size(); j += 2) {
+            if (duration < data[i][j]) {
+                duration = data[i][j];
+            }
+        }
+    }
+    return duration;
+}
 
 void Population::new_generation() {
-    std::vector<Chromosome> new_generation{static_cast<size_t>(population_size)};
-
+    std::vector<Chromosome> new_generation;
+    new_generation.reserve(population_size);
     int n_percent = static_cast<int>(population_size * 0.1);
     std::sort(population_array.begin(), population_array.end(),
-              [](Chromosome x, Chromosome y) { return Chromosome::cost_function(x) > Chromosome::cost_function(y); });
+              [&](Chromosome& x, Chromosome& y) { return this->_schedule.cost_function(x) > this->_schedule.cost_function(y); });
 
     size_t i = 0;
     // elitist strategy
     for (; i < n_percent; ++i) {
-        new_generation[i] = population_array[i];
+        new_generation.push_back(population_array[i]);
     }
-    std::cout << "The best chromosome were copied into new generation.\n";
-
     // parameterized uniform crossover
     n_percent = population_size * 0.8;
 
@@ -44,16 +56,16 @@ void Population::new_generation() {
         while (parent_one_index == parent_two_index) {
             parent_two_index = dist(rng);
         }
-        new_generation[i] = Chromosome::cross(this->population_array[parent_one_index], this->population_array[parent_two_index]);
+        new_generation.emplace_back(Chromosome::cross(this->population_array[parent_one_index], this->population_array[parent_two_index]));
     }
-    std::cout << "Crossover process completed.\n";
 
-    std::cout << "The rest of new population is randomly generated to prevent early convergence.\n";
     // one or more new members of the population are randomly generated
     // from the same distribution as the original population
+
     for (; i < population_size; ++i) {
         new_generation.emplace_back(Chromosome(population_size, new_generation[0].get_max_dur(), new_generation[0].get_prob_cross()));
     }
+
     this->population_array.clear();
     this->population_array = new_generation;
 }
