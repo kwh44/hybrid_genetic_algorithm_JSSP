@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.10)
-project(hybrid_algorithm)
+cmake_minimum_required(VERSION 3.0)
+project(hybrid_algorithm CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 
