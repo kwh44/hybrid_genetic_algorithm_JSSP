@@ -2,9 +2,6 @@
 #include <fstream>
 #include "Population.h"
 #include "Schedule.h"
-#include <vector>
-#include <string>
-
 
 int main() {
     std::cout << "__ Genetic Algorithm started __" << std::endl;
@@ -23,12 +20,11 @@ int main() {
         std::string description = v["description"];
         std::vector<std::vector<int> > test_case = v["data"];
 
-        int population_size = 100;
+        int population_size = 5;
 
         Population population = Population(population_size, 0.7, test_case);
 
-        for (int i = 0; i < 10; ++i)
-            population.new_generation();
+        break;
     }
 
     return 0;
