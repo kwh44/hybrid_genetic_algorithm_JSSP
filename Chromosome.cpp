@@ -8,18 +8,23 @@
 #include <ctime>
 #include <algorithm>
 
-Chromosome::Chromosome(int number_of_operations, int MaxDur, double prob_cross) {
+Chromosome::Chromosome(int index, int number_of_operations, int MaxDur, double prob_cross) {
     this->number_of_genes = number_of_operations * 2;
     this->max_dur = MaxDur;
     this->probability_of_crossing = prob_cross;
 
     genes.reserve(number_of_operations * 2);
-    std::mt19937_64 rng(number_of_operations);
+
+    auto seed = index * static_cast<int>(time(nullptr));
+    std::mt19937_64 rng(seed);
     std::uniform_real_distribution<double> dist(0, 1);
 
     for (size_t i = 0; i < number_of_operations; ++i) {
-        genes[i] = dist(rng);
-        genes[i + number_of_operations] = genes[i] * 1.5 * max_dur;
+        genes.push_back(dist(rng));
+    }
+
+    for (size_t i = 0; i < number_of_operations; ++i) {
+        genes.push_back(genes[i] * 1.5 * max_dur);
     }
 }
 
@@ -30,12 +35,11 @@ Chromosome::Chromosome(const Chromosome &other) {
 
     genes.reserve(number_of_genes);
     std::copy(other.genes.begin(), other.genes.end(), genes.begin());
-
 }
 
 
 Chromosome Chromosome::cross(Chromosome &one, Chromosome &two) {
-    Chromosome return_chromosome = Chromosome(one.get_size() / 2, one.get_max_dur(), one.get_prob_cross());
+    Chromosome return_chromosome = Chromosome(one.get_size() / 2, one.get_size() / 2, one.get_max_dur(), one.get_prob_cross());
 
     auto seed = static_cast<int>(time(nullptr));
     std::mt19937_64 rng(seed);
@@ -49,4 +53,11 @@ Chromosome Chromosome::cross(Chromosome &one, Chromosome &two) {
         }
     }
     return return_chromosome;
+}
+
+void Chromosome::display_genes() {
+    for (int i = 0; i < get_size(); ++i) {
+        std::cout << genes[i] << ' ';
+    }
+    std::cout << std::endl;
 }

@@ -5,11 +5,8 @@
 #ifndef HYBRID_ALGORITHM_SCHEDULE_H
 #define HYBRID_ALGORITHM_SCHEDULE_H
 
-#include <nlohmann/json.hpp>
 #include <string>
 #include "Chromosome.h"
-
-using json = nlohmann::json;
 
 class Schedule {
 private:
@@ -25,7 +22,8 @@ public:
 
     explicit Schedule(std::vector<std::vector<int> > &data_set) : test_data{data_set},
                                                                   number_of_jobs{data_set.size()},
-                                                                  number_of_operations_in_one_job{data_set[0].size() / 2} {}
+                                                                  number_of_operations_in_one_job{
+                                                                          data_set[0].size() / 2} {}
 
     std::vector<std::vector<int> > &data() { return this->test_data; }
 
@@ -38,7 +36,9 @@ private:
 
     void local_search();
 
-    int precedence_earliest_finish_time(int, Chromosome&);
+    int precedence_earliest_finish_time(int, Chromosome &, std::vector<int>&, std::vector<int> &);
+
+    int precedence_capacity_earliest_finish_time(int, std::vector<int> &, std::vector<int> &, Chromosome &);
 };
 
 

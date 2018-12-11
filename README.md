@@ -1,8 +1,7 @@
 # hybrid_genetic_algorithm_JSP
 <p>
-This project implements the hybrid genetic algorithm for the job scheduling problem described<br>
-by Jose Fernando Goncalves, Jorge Jose de Magalhaes Mendes, Maurıcio G.C. Resende in 2004,
-<a href="https://www.sciencedirect.com/science/article/abs/pii/S0377221704002656?via%3Dihub">link to paper</a>.
+This project implements a hybrid genetic algorithm for the job scheduling problem
+<a href="http://mauricio.resende.info/doc/hgajss.pdf">link to paper</a>.
 <p>
 <h5> Requirements </h5>
 <ul>

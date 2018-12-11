@@ -1,12 +1,23 @@
 #include <iostream>
 #include <fstream>
+#include <nlohmann/json.hpp>
 #include "Population.h"
 #include "Schedule.h"
 
+using json = nlohmann::json;
+
+void test();
+
 int main() {
+    test();
+    return 0;
+}
+
+void test() {
+
     std::cout << "__ Genetic Algorithm started __" << std::endl;
 
-    std::ifstream file("../dataset.json");
+    std::ifstream file("../test_dataset.json");
 
     json data_set;
 
@@ -15,17 +26,11 @@ int main() {
         std::cout << "dataset.json successfully opened.\n";
     }
 
-    for (const auto &v: data_set) {
+    std::string description = data_set[0]["description"];
+    std::vector<std::vector<int> > test_case = data_set[0]["data"];
 
-        std::string description = v["description"];
-        std::vector<std::vector<int> > test_case = v["data"];
-
-        int population_size = 5;
-
-        Population population = Population(population_size, 0.7, test_case);
-
-        break;
-    }
-
-    return 0;
-}
+    int population_size = 1;
+    std::cout << description << std::endl;
+    Population population = Population(population_size, 0.7, test_case);
+    population.new_generation();
+};

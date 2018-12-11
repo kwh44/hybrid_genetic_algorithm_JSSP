@@ -25,6 +25,7 @@ public:
 
     void new_generation();
 
+    void display_population();
 };
 
 

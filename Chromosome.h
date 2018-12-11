@@ -13,15 +13,16 @@ private:
     int max_dur = 0;
     double probability_of_crossing = 0.0;
 public:
+
     std::vector<double> genes;
 
     Chromosome() = default;
 
-    Chromosome(int size, int MaxDur, double prob_cross);
+    Chromosome(int, int, int, double);
 
-    Chromosome(const Chromosome & other);
+    Chromosome(const Chromosome &);
 
-    static Chromosome cross(Chromosome &one, Chromosome &two);
+    static Chromosome cross(Chromosome &, Chromosome &);
 
     int get_size() const { return number_of_genes; }
 
@@ -29,6 +30,11 @@ public:
 
     double get_prob_cross() const { return probability_of_crossing; }
 
+    void set_prob_cross(double value) { this->probability_of_crossing = value; }
+
+    void set_num_of_genes(int value) { this->number_of_genes = value; }
+
+    void display_genes();
 };
 
 
