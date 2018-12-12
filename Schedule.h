@@ -36,9 +36,13 @@ private:
 
     void local_search();
 
-    int precedence_earliest_finish_time(int, Chromosome &, std::vector<int>&, std::vector<int> &);
+    int precedence_earliest_finish_time(int, Chromosome &, std::vector<int> &, std::vector<int> &);
 
     int precedence_capacity_earliest_finish_time(int, std::vector<int> &, std::vector<int> &, Chromosome &);
+
+    std::vector<int> find_critical_path(std::vector<int> &, std::vector<int> &);
+
+    bool evaluate_swap(std::vector<int> &, std::vector<int> &, int, int);
 };
 
 

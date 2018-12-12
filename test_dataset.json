@@ -1,0 +1,19 @@
+[
+  {
+    "description": "Example data from paper",
+    "data": [
+      [
+        2,
+        4,
+        1,
+        2
+      ],
+      [
+        1,
+        1,
+        2,
+        3
+      ]
+    ]
+  }
+]

@@ -25,7 +25,11 @@ public:
 
     void new_generation();
 
+    int solution();
+
     void display_population();
+private:
+    void sort();
 };
 
 
