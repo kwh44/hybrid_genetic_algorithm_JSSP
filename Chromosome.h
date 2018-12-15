@@ -9,32 +9,53 @@
 
 class Chromosome {
 private:
-    int number_of_genes = 0;
-    int max_dur = 0;
-    double probability_of_crossing = 0.0;
-public:
-
+    int number_of_genes;
+    int max_dur;
+    double probability_of_crossing = 0;
     std::vector<double> genes;
-
-    Chromosome() = default;
+public:
+    Chromosome() {
+        number_of_genes = 0;
+        max_dur = 0;
+        probability_of_crossing = 0;
+        genes.reserve(number_of_genes);
+    }
 
     Chromosome(int, int, int, double);
 
     Chromosome(const Chromosome &);
 
+    Chromosome(Chromosome &);
+
+    Chromosome(Chromosome &&other) noexcept;
+
+    Chromosome &operator=(Chromosome &&) noexcept;
+
+    Chromosome &operator=(const Chromosome &other);
+
+    ~Chromosome() {genes.clear();}
+
     static Chromosome cross(Chromosome &, Chromosome &);
 
     int get_size() const { return number_of_genes; }
 
+    std::vector<double> &get_genes() { return this->genes; }
+
     int get_max_dur() const { return max_dur; }
 
-    double get_prob_cross() const { return probability_of_crossing; }
+    double get_prob_cross() const { return this->probability_of_crossing; }
+
+    // Debug method
+    void set_number_of_genes(int value) { number_of_genes = value; }
+
+    void set_gene(int i, double value) { this->genes[i] = value; }
+
+    void set_max_dur(int value) { this->max_dur = value; }
 
     void set_prob_cross(double value) { this->probability_of_crossing = value; }
 
-    void set_num_of_genes(int value) { this->number_of_genes = value; }
-
-    void display_genes();
+    // End of Debug methods
+    void display_genes() const;
 };
 
 

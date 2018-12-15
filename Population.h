@@ -23,6 +23,16 @@ public:
 
     explicit Population(int size, double prob_cross, std::vector<std::vector<int> > &data);
 
+    Population(Population &&) noexcept;
+
+    Population&operator=(Population &&) noexcept;
+
+    ~Population() {
+        _schedule.~Schedule();
+        for (size_t i = 0; i < population_array.size(); ++i) {
+            population_array[i].~Chromosome();
+        }
+    }
     void new_generation();
 
     int solution();
