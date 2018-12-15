@@ -32,7 +32,6 @@ Schedule &Schedule::operator=(Schedule &&other) noexcept {
 static int _max(std::vector<int> &);
 
 int Schedule::cost_function(Chromosome &one) {
-    std::cout << "Cost function " << std::endl;
     construct_schedule(one);
     local_search();
     auto feedback_value = _max(array_of_finish_times);
@@ -48,13 +47,11 @@ int _max(std::vector<int> &array) {
             max_value = array[i];
         }
     }
-    std::cout << "Cost function returned." << std::endl;
     return max_value;
 }
 
 
 void Schedule::construct_schedule(Chromosome &chromo) {
-    std::cout << "Construct schedule" << std::endl;
     int g = 0;
     int t = 0;
     std::vector<int> &F = array_of_finish_times;
@@ -87,21 +84,16 @@ void Schedule::construct_schedule(Chromosome &chromo) {
             update_E(E, S, F, t, g, chromo);
         }
     }
-    std::cout << "Construct Schedule returned" << std::endl;
 }
 
 void Schedule::local_search() {
-    std::cout << "Local search" << std::endl;
     int current_solution_updated = 0;
     std::vector<int> cp_of_finish_time = array_of_finish_times;
     std::vector<int> cp_of_scheduled_operations = array_of_scheduled_operations;
-
     // determine critical path
     auto critical_path = find_critical_path(cp_of_finish_time, cp_of_scheduled_operations);
-
     // determine all critical blocks
     int start = 0, end = 0;
-
     while (start != critical_path.size() - 1) /* */ {
         for (int i = start + 1; i < critical_path.size(); ++i) {
             int operation = cp_of_scheduled_operations[critical_path[i]];
@@ -111,7 +103,6 @@ void Schedule::local_search() {
             int start_operation = cp_of_scheduled_operations[critical_path[start]];
             int start_job = (start_operation - 1) / number_of_operations_in_one_job;
             int machine_required_by_start_job = test_data[start_job][((start_operation - 1) % number_of_jobs) * 2];
-
             if (machine_required_by_operation == machine_required_by_start_job) ++end;
             else {
                 if (start == end) {
@@ -160,8 +151,6 @@ void Schedule::local_search() {
         array_of_finish_times = cp_of_finish_time;
         array_of_scheduled_operations = cp_of_scheduled_operations;
     }
-
-    std::cout << "Local search returned" << std::endl;
 }
 
 bool Schedule::evaluate_swap(std::vector<int> &F, std::vector<int> &S, int start, int end) {
@@ -169,12 +158,8 @@ bool Schedule::evaluate_swap(std::vector<int> &F, std::vector<int> &S, int start
     for (int i = 0; i < F.size(); ++i) {
         if (old_makespan < F[i]) old_makespan = F[i];
     }
-
     int start_operation = S[start], start_job = (start_operation - 1) / number_of_operations_in_one_job;
-    int processing_time_of_start_operation = test_data[start_job][((start_operation - 1) % number_of_jobs) * 2 + 1];
-
     int end_operation = S[end], end_job = (end_operation - 1) / number_of_operations_in_one_job;
-    int processing_time_of_end_operation = test_data[end_job][((end_operation - 1) % number_of_jobs) * 2 + 1];
     std::swap(S[start], S[end]);
     _new_ef(S, F, start);
     _new_ef(S, F, end);
@@ -219,12 +204,8 @@ void Schedule::_new_ef(std::vector<int> &S, std::vector<int> &F, int i) {
 
 void
 Schedule::update_E(std::vector<int> &E, std::vector<int> &S, std::vector<int> &F, int t, int g, Chromosome &chromo) {
-    std::cout << "Update E " << std::endl;
-    std::cout << "Chromo is" << std::endl;
-    chromo.display_genes();
-
     double delay_of_g_th_iteration = chromo.get_genes()[number_of_operations_in_one_job * number_of_jobs + g];
-    std::cout << "delay of gth iteration is " << delay_of_g_th_iteration << std::endl;
+
     for (int i = 0; i < number_of_jobs; ++i) { // traversing each job
         for (int j = 0; j < number_of_operations_in_one_job; ++j) { // traversing each operation in job
 
@@ -238,7 +219,6 @@ Schedule::update_E(std::vector<int> &E, std::vector<int> &S, std::vector<int> &F
             }
             if (status) continue;
             double priority_of_current_operation = chromo.get_genes()[i * number_of_operations_in_one_job + j];
-            std::cout << " priority of current operation is " << priority_of_current_operation << std::endl;
             std::vector<int> predecessor_index_list;
             for (int r = 0; r < number_of_operations_in_one_job; ++r) {
                 double priority_of_r_th_operation = chromo.get_genes()[i * number_of_operations_in_one_job + r];
@@ -246,9 +226,6 @@ Schedule::update_E(std::vector<int> &E, std::vector<int> &S, std::vector<int> &F
                     predecessor_index_list.push_back(r);
                 }
             }
-            std::cout << "Predecessors are:\n";
-            for (const auto &v:predecessor_index_list) std::cout << v << ' ';
-            std::cout << std::endl;
             if (predecessor_index_list.size() == 0) /**/{
                 E.push_back(i * number_of_operations_in_one_job + j + 1);
             } else {
@@ -274,7 +251,6 @@ Schedule::update_E(std::vector<int> &E, std::vector<int> &S, std::vector<int> &F
             }
         }
     }
-    std::cout << "Update E returned" << std::endl;
 }
 
 int Schedule::get_highest_priority_operation(std::vector<int> &array, Chromosome &chromo) {
@@ -296,7 +272,7 @@ int Schedule::precedence_capacity_earliest_finish_time(int operation_number, std
     int time_in_line = 0, operation_job, machine_required_by_operation;
     for (int i = 1; i < S.size(); ++i) {
         int operation = S[i];
-        // where operation is the number of operation in the chromosome
+        // where operation is the index of operation priority in a chromosome
         operation_job = (operation - 1) / number_of_operations_in_one_job;
         machine_required_by_operation = test_data[operation_job][((operation - 1) % number_of_jobs) * 2];
         if (operation_job == job || machine_required_by_current_operation == machine_required_by_operation) {
@@ -328,7 +304,6 @@ std::vector<int> Schedule::find_critical_path(std::vector<int> &F, std::vector<i
     }
     int last_operation = S[index_of_last_operation], job_of_last_operation =
             (last_operation - 1) / number_of_operations_in_one_job;
-
     critical_path.push_back(index_of_last_operation);
     finish_time -= test_data[job_of_last_operation][((last_operation - 1) % number_of_jobs) * 2 + 1];
     while (finish_time > 0) {

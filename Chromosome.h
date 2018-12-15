@@ -33,7 +33,7 @@ public:
 
     Chromosome &operator=(const Chromosome &other);
 
-    ~Chromosome() {genes.clear();}
+    ~Chromosome() { genes.clear(); }
 
     static Chromosome cross(Chromosome &, Chromosome &);
 
@@ -45,16 +45,12 @@ public:
 
     double get_prob_cross() const { return this->probability_of_crossing; }
 
-    // Debug method
     void set_number_of_genes(int value) { number_of_genes = value; }
-
-    void set_gene(int i, double value) { this->genes[i] = value; }
 
     void set_max_dur(int value) { this->max_dur = value; }
 
     void set_prob_cross(double value) { this->probability_of_crossing = value; }
 
-    // End of Debug methods
     void display_genes() const;
 };
 

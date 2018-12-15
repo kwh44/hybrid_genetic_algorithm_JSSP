@@ -12,7 +12,7 @@ void test_mt06();
 
 
 int main() {
-    test();
+    test_mt06();
     return 0;
 }
 
@@ -25,7 +25,7 @@ void test() {
         data_set = json::parse(file);
         std::cout << "dataset.json successfully opened.\n";
     }
-
+    file.close();
     std::string description = data_set[0]["description"];
     std::cout << description << std::endl;
     std::vector<std::vector<int> > test_case = data_set[0]["data"];
@@ -38,7 +38,6 @@ void test() {
     }
     auto x = population.solution();
     std::cout << "Best makespan is " << x << std::endl;
-    file.close();
 }
 
 void test_mt06() {
@@ -49,16 +48,15 @@ void test_mt06() {
         data_set = json::parse(file);
         std::cout << "dataset.json successfully opened.\n";
     }
+    file.close();
     std::string description = data_set[0]["description"];
     std::cout << description << std::endl;
     std::vector<std::vector<int> > test_case = data_set[0]["data"];
-    int population_size = 100;
+    size_t population_size = test_case.size() * test_case[0].size();
     Population population = Population(population_size, 0.7, test_case);
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 400; ++i) {
         population.new_generation();
-        std::cout << "Generation " << i << " completed." << std::endl;
     }
     auto x = population.solution();
-    std::cout << "Best make-span is " << x << std::endl;
-    file.close();
+    std::cout << "Best makespan is " << x << std::endl;
 }

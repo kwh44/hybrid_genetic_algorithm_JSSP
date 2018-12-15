@@ -17,15 +17,15 @@ class Population {
 public:
     Population() = delete;
 
+    Population(const Population &);
+
     std::vector<Chromosome> &population() { return population_array; }
 
     int size() const { return population_size; }
 
-    explicit Population(int size, double prob_cross, std::vector<std::vector<int> > &data);
+    explicit Population(size_t size, double prob_cross, std::vector<std::vector<int> > &data);
 
-    Population(Population &&) noexcept;
-
-    Population&operator=(Population &&) noexcept;
+    Population &operator=(Population &&) noexcept;
 
     ~Population() {
         _schedule.~Schedule();
@@ -33,11 +33,13 @@ public:
             population_array[i].~Chromosome();
         }
     }
+
     void new_generation();
 
     int solution();
 
     void display_population();
+
 private:
     void sort();
 };

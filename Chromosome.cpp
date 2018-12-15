@@ -16,12 +16,10 @@ Chromosome::Chromosome(int index, int number_of_operations, int MaxDur, double p
     auto seed = index * static_cast<int>(time(nullptr));
     std::mt19937_64 rng(seed);
     std::uniform_real_distribution<double> dist(0, 1);
-
     for (size_t i = 0; i < number_of_operations; ++i)
         this->genes.push_back(dist(rng));
     for (size_t i = 0; i < number_of_operations; ++i)
         this->genes.push_back(genes[i] * 1.5 * max_dur);
-
 }
 
 
@@ -65,7 +63,7 @@ Chromosome &Chromosome::operator=(Chromosome &&other) noexcept {
     return *this;
 }
 
-
+// static method
 Chromosome Chromosome::cross(Chromosome &one, Chromosome &two) {
     auto return_chromosome = Chromosome();
     return_chromosome.set_max_dur(one.get_max_dur());

@@ -3,7 +3,7 @@ project(hybrid_algorithm CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 
-# set(CMAKE_CXX_FLAGS "-O3")
+set(CMAKE_CXX_FLAGS "-O3")
 
 find_package(nlohmann_json 3.2.0 REQUIRED)
 
