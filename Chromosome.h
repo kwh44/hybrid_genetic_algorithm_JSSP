@@ -6,13 +6,15 @@
 #define HYBRID_ALGORITHM_CHROMOSOME_H
 
 #include <vector>
+#include <random>
+#include <algorithm>
 
 class Chromosome {
-private:
     int number_of_genes;
     int max_dur;
     double probability_of_crossing = 0;
     std::vector<double> genes;
+    static std::mt19937_64 gen;
 public:
     Chromosome() {
         number_of_genes = 0;
@@ -21,7 +23,7 @@ public:
         genes.reserve(number_of_genes);
     }
 
-    Chromosome(int, int, int, double);
+    Chromosome(int, int, double);
 
     Chromosome(const Chromosome &);
 
@@ -53,6 +55,5 @@ public:
 
     void display_genes() const;
 };
-
 
 #endif //HYBRID_ALGORITHM_CHROMOSOME_H

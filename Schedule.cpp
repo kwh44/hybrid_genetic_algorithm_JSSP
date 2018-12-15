@@ -208,7 +208,6 @@ Schedule::update_E(std::vector<int> &E, std::vector<int> &S, std::vector<int> &F
 
     for (int i = 0; i < number_of_jobs; ++i) { // traversing each job
         for (int j = 0; j < number_of_operations_in_one_job; ++j) { // traversing each operation in job
-
             int status = 0;
             for (const auto &q: S) { // traversing already scheduled operations
                 // if operation was already scheduled for previous iterations

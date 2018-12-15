@@ -3,12 +3,11 @@
 //
 
 #include "Population.h"
-#include <algorithm>
-#include <random>
-#include <ctime>
 #include <iostream>
 
 static int _max(std::vector<std::vector<int> > &data);
+
+std::mt19937_64 Population::gen = std::mt19937_64(20);
 
 Population::Population(const Population &other) {
     this->_schedule = other._schedule;
@@ -22,7 +21,7 @@ Population::Population(size_t size, double prob_cross, std::vector<std::vector<i
     this->population_size = size;
     this->population_array.reserve(size);
     for (size_t i = 0; i < size; ++i) {
-        population_array.emplace_back(Chromosome(i, data.size() * (data[0].size() / 2), _max(data), prob_cross));
+        population_array.emplace_back(Chromosome(data.size() * (data[0].size() / 2), _max(data), prob_cross));
     }
 }
 
@@ -58,15 +57,13 @@ void Population::new_generation() {
     // parameterized uniform crossover
     n_percent = population_size * 0.8;
 
-    int seed = time(nullptr);
-    std::mt19937_64 rng(seed);
     std::uniform_int_distribution<> dist(0, population_size - 1);
 
     for (; i < n_percent; ++i) {
-        int parent_one_index = dist(rng);
-        int parent_two_index = dist(rng);
+        int parent_one_index = dist(Population::gen);
+        int parent_two_index = dist(Population::gen);
         while (parent_one_index == parent_two_index) {
-            parent_two_index = dist(rng);
+            parent_two_index = dist(Population::gen);
         }
         new_generation.emplace_back(
                 Chromosome::cross(this->population_array[parent_one_index], this->population_array[parent_two_index]));
@@ -77,7 +74,7 @@ void Population::new_generation() {
         auto new_size = population_array[i].get_size() / 2;
         auto max_dur = population_array[i].get_max_dur();
         auto prob_of_cross = population_array[i].get_prob_cross();
-        new_generation.push_back(Chromosome(i + 1, new_size, max_dur, prob_of_cross));
+        new_generation.push_back(Chromosome(new_size, max_dur, prob_of_cross));
     }
     population_array.clear();
     for (const auto &v:new_generation) population_array.push_back(v);

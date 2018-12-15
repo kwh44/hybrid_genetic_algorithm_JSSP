@@ -6,14 +6,14 @@
 #define HYBRID_ALGORITHM_POPULATION_H
 
 #include "Chromosome.h"
-#include <vector>
 #include "Schedule.h"
 
 class Population {
     std::vector<Chromosome> population_array;
     int population_size = 0;
     Schedule _schedule;
-
+    // random number engine based on Mersenne Twister algorithm
+    static std::mt19937_64 gen;
 public:
     Population() = delete;
 
@@ -29,9 +29,7 @@ public:
 
     ~Population() {
         _schedule.~Schedule();
-        for (size_t i = 0; i < population_array.size(); ++i) {
-            population_array[i].~Chromosome();
-        }
+        for (const auto &v: population_array) v.~Chromosome();
     }
 
     void new_generation();
@@ -43,6 +41,5 @@ public:
 private:
     void sort();
 };
-
 
 #endif //HYBRID_ALGORITHM_POPULATION_H

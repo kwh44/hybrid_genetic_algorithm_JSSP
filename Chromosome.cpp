@@ -3,21 +3,18 @@
 //
 
 #include "Chromosome.h"
-#include <random>
+#include "Population.h"
 #include <iostream>
-#include <ctime>
-#include <algorithm>
 
+std::mt19937_64 Chromosome::gen = std::mt19937_64(20);
 
-Chromosome::Chromosome(int index, int number_of_operations, int MaxDur, double prob_cross) {
+Chromosome::Chromosome(int number_of_operations, int MaxDur, double prob_cross) {
     this->number_of_genes = number_of_operations * 2;
     this->max_dur = MaxDur;
     this->probability_of_crossing = prob_cross;
-    auto seed = index * static_cast<int>(time(nullptr));
-    std::mt19937_64 rng(seed);
     std::uniform_real_distribution<double> dist(0, 1);
     for (size_t i = 0; i < number_of_operations; ++i)
-        this->genes.push_back(dist(rng));
+        this->genes.push_back(dist(Chromosome::gen));
     for (size_t i = 0; i < number_of_operations; ++i)
         this->genes.push_back(genes[i] * 1.5 * max_dur);
 }
@@ -69,11 +66,9 @@ Chromosome Chromosome::cross(Chromosome &one, Chromosome &two) {
     return_chromosome.set_max_dur(one.get_max_dur());
     return_chromosome.set_prob_cross(one.get_prob_cross());
     return_chromosome.set_number_of_genes(one.get_size());
-    auto seed = static_cast<int>(time(nullptr));
-    std::mt19937_64 rng(seed);
     std::uniform_real_distribution<double> dist(0, 1);
     for (int i = 0; i < return_chromosome.get_size(); ++i) {
-        if (dist(rng) <= return_chromosome.get_prob_cross()) {
+        if (dist(Chromosome::gen) <= return_chromosome.get_prob_cross()) {
             return_chromosome.get_genes().push_back(one.genes[i]);
         } else {
             return_chromosome.get_genes().push_back(two.genes[i]);

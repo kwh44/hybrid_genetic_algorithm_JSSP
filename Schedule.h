@@ -15,7 +15,6 @@ private:
     std::vector<std::vector<int>> test_data;
     std::vector<int> array_of_finish_times;
     std::vector<int> array_of_scheduled_operations;
-
 public:
 
     Schedule();
@@ -60,6 +59,5 @@ private:
 
     void _new_ef(std::vector<int> &, std::vector<int> &, int);
 };
-
 
 #endif //HYBRID_ALGORITHM_SCHEDULE_H
