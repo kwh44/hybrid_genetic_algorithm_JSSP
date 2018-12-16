@@ -164,23 +164,10 @@ bool Schedule::evaluate_swap(std::vector<int> &F, std::vector<int> &S, int start
     _new_ef(S, F, start);
     _new_ef(S, F, end);
     for (int i = end + 1; i < S.size(); ++i) {
-        int operation_number = S[i];
-        int job = (operation_number - 1) / number_of_operations_in_one_job;
-        int machine_required_by_current_operation = test_data[job][((operation_number - 1) % number_of_jobs) * 2];
-        int time_in_line = 0, operation, operation_job, machine_required_by_operation;
-        for (int j = 1; j < i; ++j) {
-            operation = S[j];
-            operation_job = (operation - 1) / number_of_operations_in_one_job;
-            machine_required_by_operation = test_data[operation_job][((operation - 1) % number_of_jobs) * 2];
-            if (operation_job == job || machine_required_by_current_operation == machine_required_by_operation) {
-                if (time_in_line < F[j]) time_in_line = F[j];
-            }
-        }
-        F[i] = time_in_line + test_data[job][((operation_number - 1) % number_of_jobs) * 2 + 1];
-
+        _new_ef(S, F, i);
     }
-    for (int i = 0; i < F.size(); ++i) {
-        if (new_makespan < F[i]) new_makespan = F[i];
+    for (const auto &v : F) {
+        if (new_makespan < v) new_makespan = v;
     }
     return old_makespan > new_makespan;
 }

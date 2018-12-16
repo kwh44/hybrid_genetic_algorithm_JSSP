@@ -63,7 +63,7 @@ void Population::new_generation() {
         int parent_one_index = dist(Population::gen);
         int parent_two_index = dist(Population::gen);
         while (parent_one_index == parent_two_index) {
-            parent_two_index = dist(Population::gen);
+                parent_two_index = dist(Population::gen);
         }
         new_generation.emplace_back(
                 Chromosome::cross(this->population_array[parent_one_index], this->population_array[parent_two_index]));
@@ -97,7 +97,8 @@ void Population::display_population() {
 
 void Population::sort() {
     std::vector<int> index_list;
-    for (size_t i = 0; i < population_size; ++i) index_list.push_back(i);
+    index_list.reserve(population_size);
+    for (int i = 0; i < population_size; ++i) index_list.push_back(i);
     std::sort(index_list.begin(), index_list.end(),
               [&](int x, int y) {
                   return this->_schedule.cost_function(population_array[x]) >
