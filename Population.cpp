@@ -47,7 +47,7 @@ static int _max(std::vector<std::vector<int> > &data) {
 
 void Population::new_generation() {
     std::vector<Chromosome> new_generation;
-    int n_percent = population_size * 0.1;
+    int n_percent = population_size * 0.05;
 
     sort();
     size_t i = 0;
@@ -56,7 +56,7 @@ void Population::new_generation() {
         new_generation.push_back(population_array[i]);
     }
     // parameterized uniform crossover
-    n_percent = population_size * 0.8;
+    n_percent = population_size * 0.5;
 
     std::uniform_int_distribution<> dist(0, population_size - 1);
 
@@ -64,7 +64,7 @@ void Population::new_generation() {
         int parent_one_index = dist(Population::gen);
         int parent_two_index = dist(Population::gen);
         while (parent_one_index == parent_two_index) {
-                parent_two_index = dist(Population::gen);
+            parent_two_index = dist(Population::gen);
         }
         new_generation.emplace_back(
                 Chromosome::cross(this->population_array[parent_one_index], this->population_array[parent_two_index]));
@@ -75,7 +75,7 @@ void Population::new_generation() {
         auto new_size = population_array[i].get_size() / 2;
         auto max_dur = population_array[i].get_max_dur();
         auto prob_of_cross = population_array[i].get_prob_cross();
-        new_generation.push_back(Chromosome(new_size, max_dur, prob_of_cross));
+        new_generation.emplace_back(Chromosome(new_size, max_dur, prob_of_cross));
     }
     population_array.clear();
     for (const auto &v:new_generation) population_array.push_back(v);
@@ -102,7 +102,7 @@ void Population::sort() {
     std::cout << " ";
     std::sort(index_list.begin(), index_list.end(),
               [&](int x, int y) {
-                  return this->_schedule.cost_function(population_array[x], false) >
+                  return this->_schedule.cost_function(population_array[x], false) <
                          this->_schedule.cost_function(population_array[y], false);
               });
 

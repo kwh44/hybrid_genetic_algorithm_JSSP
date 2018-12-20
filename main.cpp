@@ -9,10 +9,10 @@ using json = nlohmann::json;
 void run_test_case(int number);
 
 int main() {
-    // there are 43 test cases
+    // there are 44 test cases
     // test_case(30) -- means that algorithm will work
     // on 31-th instance of JSP problem from dataset.json
-    run_test_case(10);
+    run_test_case(1);
     return 0;
 }
 
@@ -30,8 +30,8 @@ void run_test_case(int number) {
     std::vector<std::vector<int> > test_case = data_set[number]["data"];
     size_t population_size = test_case.size() * test_case[0].size();
     Population population = Population(population_size, 0.7, test_case);
-    int number_of_generations = 100;
-    int best_makespan = 888888888;
+    int number_of_generations = 400;
+    int best_makespan = 88888888;
     Chromosome best_chromosome;
     int best_solution_generation_number = 0;
     for (int i = 0; i < number_of_generations; ++i) {
@@ -41,7 +41,7 @@ void run_test_case(int number) {
         if (best_makespan > current_solution) {
             best_makespan = current_solution;
             best_chromosome = population.population()[0];
-            best_solution_generation_number = i;
+            best_solution_generation_number = i + 1;
         }
     }
     std::cout << "Best makespan is " << best_makespan << std::endl;
