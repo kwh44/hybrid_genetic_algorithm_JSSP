@@ -48,6 +48,7 @@ static int _max(std::vector<std::vector<int> > &data) {
 void Population::new_generation() {
     std::vector<Chromosome> new_generation;
     int n_percent = population_size * 0.1;
+
     sort();
     size_t i = 0;
     // elitist strategy
@@ -80,8 +81,8 @@ void Population::new_generation() {
     for (const auto &v:new_generation) population_array.push_back(v);
 }
 
-int Population::solution() {
-    auto return_value = this->_schedule.cost_function(population_array[0]);
+int Population::solution(bool show) {
+    auto return_value = this->_schedule.cost_function(population_array[0], show);
     return return_value;
 }
 
@@ -97,12 +98,12 @@ void Population::display_population() {
 
 void Population::sort() {
     std::vector<int> index_list;
-    index_list.reserve(population_size);
     for (int i = 0; i < population_size; ++i) index_list.push_back(i);
+    std::cout << " ";
     std::sort(index_list.begin(), index_list.end(),
               [&](int x, int y) {
-                  return this->_schedule.cost_function(population_array[x]) >
-                         this->_schedule.cost_function(population_array[y]);
+                  return this->_schedule.cost_function(population_array[x], false) >
+                         this->_schedule.cost_function(population_array[y], false);
               });
 
     for (size_t i = 0; i < index_list.size(); ++i) {

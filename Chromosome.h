@@ -53,7 +53,6 @@ public:
 
     void set_prob_cross(double value) { this->probability_of_crossing = value; }
 
-    void display_genes() const;
 };
 
 #endif //HYBRID_ALGORITHM_CHROMOSOME_H

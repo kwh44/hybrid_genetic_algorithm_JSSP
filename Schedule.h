@@ -7,22 +7,22 @@
 
 #include <string>
 #include "Chromosome.h"
+#include "Operation.h"
+#include <iostream>
 
 class Schedule {
 private:
     size_t number_of_jobs;
     size_t number_of_operations_in_one_job;
-    std::vector<std::vector<int>> test_data;
+    std::vector<Operation> operations;
     std::vector<int> array_of_finish_times;
+    // Arrays of scheduled operations contains indexes of elements in vector operations
     std::vector<int> array_of_scheduled_operations;
 public:
 
-    Schedule();
+    Schedule() = default;
 
-    explicit Schedule(std::vector<std::vector<int> > &data_set) : test_data{data_set},
-                                                                  number_of_jobs{data_set.size()},
-                                                                  number_of_operations_in_one_job{
-                                                                          data_set[0].size() / 2} {}
+    explicit Schedule(std::vector<std::vector<int> > &data_set);
 
     Schedule &operator=(const Schedule &);
 
@@ -33,12 +33,20 @@ public:
         number_of_operations_in_one_job = 0;
         array_of_finish_times.clear();
         array_of_scheduled_operations.clear();
-        test_data.clear();
+        operations.clear();
     }
 
-    std::vector<std::vector<int> > &get_data() { return this->test_data; }
+    int cost_function(Chromosome &, bool);
 
-    int cost_function(Chromosome &);
+    std::vector<int> &get_array_of_finish_times() { return array_of_finish_times; }
+
+    std::vector<int> &get_array_of_scheduled_operations() { return array_of_scheduled_operations; }
+
+    size_t job_number() { return number_of_jobs; }
+
+    size_t operations_number() { return number_of_operations_in_one_job; }
+
+    std::vector<Operation> &get_data() { return operations; }
 
 private:
     void construct_schedule(Chromosome &);
@@ -49,15 +57,17 @@ private:
 
     int time_of_g_iteration(std::vector<int> &, int);
 
-    void local_search();
+    void local_search(Chromosome &);
+
+    std::vector<int> get_critical_blocks(std::vector<int> &);
 
     int precedence_capacity_earliest_finish_time(int, std::vector<int> &, std::vector<int> &, Chromosome &);
 
     std::vector<int> find_critical_path(std::vector<int> &, std::vector<int> &);
 
-    bool evaluate_swap(std::vector<int> &, std::vector<int> &, int, int);
+    bool evaluate_swap(Chromosome &, std::vector<int> &, std::vector<int> &, int, int);
 
-    void _new_ef(std::vector<int> &, std::vector<int> &, int);
+    void _new_ef(std::vector<int> &, std::vector<int> &, int, Chromosome &);
 };
 
 #endif //HYBRID_ALGORITHM_SCHEDULE_H

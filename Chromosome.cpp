@@ -9,58 +9,57 @@
 std::mt19937_64 Chromosome::gen = std::mt19937_64(20);
 
 Chromosome::Chromosome(int number_of_operations, int MaxDur, double prob_cross) {
-    this->number_of_genes = number_of_operations * 2;
-    this->max_dur = MaxDur;
-    this->probability_of_crossing = prob_cross;
+    number_of_genes = number_of_operations * 2;
+    max_dur = MaxDur;
+    probability_of_crossing = prob_cross;
     std::uniform_real_distribution<double> dist(0, 1);
     for (size_t i = 0; i < number_of_operations; ++i)
-        this->genes.push_back(dist(Chromosome::gen));
+        genes.push_back(dist(Chromosome::gen));
     for (size_t i = 0; i < number_of_operations; ++i)
-        this->genes.push_back(genes[i] * 1.5 * max_dur);
+        genes.push_back(genes[i] * 1.5 * max_dur);
 }
 
 
 Chromosome::Chromosome(Chromosome &other) {
-    this->number_of_genes = other.get_size();
-    this->max_dur = other.get_max_dur();
-    this->probability_of_crossing = other.get_prob_cross();
-    for (size_t i = 0; i < other.genes.size(); ++i) genes.push_back(other.genes[i]);
+    number_of_genes = other.get_size();
+    max_dur = other.get_max_dur();
+    probability_of_crossing = other.get_prob_cross();
+    for (const auto &v: other.genes) genes.push_back(v);
 }
 
 Chromosome::Chromosome(const Chromosome &other) {
-    this->number_of_genes = other.number_of_genes;
-    this->max_dur = other.max_dur;
-    this->probability_of_crossing = other.probability_of_crossing;
-    for (size_t i = 0; i < other.number_of_genes; ++i) genes.push_back(other.genes[i]);
+    number_of_genes = other.number_of_genes;
+    max_dur = other.max_dur;
+    probability_of_crossing = other.probability_of_crossing;
+    for (const auto &v: other.genes) genes.push_back(v);
 }
 
 
 Chromosome::Chromosome(Chromosome &&other) noexcept {
-    this->number_of_genes = other.number_of_genes;
-    this->max_dur = other.max_dur;
-    this->probability_of_crossing = other.probability_of_crossing;
-    for (size_t i = 0; i < other.number_of_genes; ++i) genes.push_back(other.genes[i]);
+    number_of_genes = other.number_of_genes;
+    max_dur = other.max_dur;
+    probability_of_crossing = other.probability_of_crossing;
+    for (const auto &v: other.genes) genes.push_back(v);
 }
 
 Chromosome &Chromosome::operator=(const Chromosome &other) {
-    this->number_of_genes = other.number_of_genes;
-    this->max_dur = other.max_dur;
-    this->probability_of_crossing = other.probability_of_crossing;
-    this->genes.clear();
-    for (size_t i = 0; i < other.number_of_genes; ++i) genes.push_back(other.genes[i]);
+    number_of_genes = other.number_of_genes;
+    max_dur = other.max_dur;
+    probability_of_crossing = other.probability_of_crossing;
+    genes.clear();
+    for (const auto &v: other.genes) genes.push_back(v);
     return *this;
 }
 
 Chromosome &Chromosome::operator=(Chromosome &&other) noexcept {
-    this->number_of_genes = other.number_of_genes;
-    this->max_dur = other.max_dur;
-    this->probability_of_crossing = other.probability_of_crossing;
-    this->genes.clear();
-    for (size_t i = 0; i < other.number_of_genes; ++i) genes.push_back(other.genes[i]);
+    number_of_genes = other.number_of_genes;
+    max_dur = other.max_dur;
+    probability_of_crossing = other.probability_of_crossing;
+    genes.clear();
+    for (const auto &v: other.genes) genes.push_back(v);
     return *this;
 }
 
-// static method
 Chromosome Chromosome::cross(Chromosome &one, Chromosome &two) {
     auto return_chromosome = Chromosome();
     return_chromosome.set_max_dur(one.get_max_dur());
@@ -75,10 +74,4 @@ Chromosome Chromosome::cross(Chromosome &one, Chromosome &two) {
         }
     }
     return return_chromosome;
-}
-
-void Chromosome::display_genes() const {
-    for (int i = 0; i < get_size(); ++i)
-        std::cout << this->genes[i] << ' ';
-    std::cout << std::endl;
 }

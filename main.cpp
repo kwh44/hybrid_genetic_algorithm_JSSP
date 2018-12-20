@@ -6,18 +6,58 @@
 
 using json = nlohmann::json;
 
-void test();
+void test_example_from_paper();
 
-void test_mt06();
-
+void test_case(int number);
 
 int main() {
-    test_mt06();
+    test_example_from_paper();
+    // there are 43 test cases
+    // test_case(30) -- means that algorithm will work
+    // on 31-th instance of JSP problem from dataset.json
+    // test_case(10);
     return 0;
 }
 
+void test_case(int number) {
+    std::cout << "__ Genetic Algorithm started __" << std::endl;
+    std::ifstream file("../dataset.json");
+    json data_set;
+    if (file.is_open()) {
+        data_set = json::parse(file);
+        std::cout << "dataset.json successfully opened.\n";
+    }
+    file.close();
+    std::string description = data_set[number]["description"];
+    std::cout << description << std::endl;
+    std::vector<std::vector<int> > test_case = data_set[number]["data"];
+    size_t population_size = test_case.size() * test_case[0].size();
+    Population population = Population(population_size, 0.7, test_case);
+    int number_of_generations = 100;
+    int best_makespan = 888888888;
+    Chromosome best_chromosome;
+    int best_solution_generation_number = 0;
+    for (int i = 0; i < number_of_generations; ++i) {
+        population.new_generation();
+        std::cout << "[ OK ] ___ generation ___ " << i + 1 << ";\n";
+        auto current_solution = population.solution(false);
+        if (best_makespan > current_solution) {
+            best_makespan = current_solution;
+            best_chromosome = population.population()[0];
+            best_solution_generation_number = i;
+        }
+    }
+    std::cout << "Best makespan is " << best_makespan << std::endl;
+    std::cout << "Number of generations taken to obtain best makespan is " << best_solution_generation_number
+              << std::endl;
+    std::cout << "Chromosome that generated best makespan is: " << std::endl;
+    for (int i = 0; i < best_chromosome.get_size(); ++i)
+        std::cout << best_chromosome.get_genes()[i] << ' ';
+    std::cout << std::endl;
+}
 
-void test() {
+
+void test_example_from_paper() {
     std::cout << "__ Genetic Algorithm started __" << std::endl;
     std::ifstream file("../test_dataset.json");
     json data_set;
@@ -31,45 +71,35 @@ void test() {
     std::vector<std::vector<int> > test_case = data_set[0]["data"];
     size_t population_size = test_case.size() * test_case[0].size();;
     Population population = Population(population_size, 0.7, test_case);
-    std::cout << "___ initial population ___" << std::endl;
-    population.display_population();
-    std::cout << "___ end ____\n" << std::endl;
-    for (int i = 0; i < 100; ++i) {
+    int number_of_generations = 100;
+    int best_makespan = 888888888;
+    Chromosome best_chromosome;
+    int best_solution_generation_number = 0;
+    for (int i = 0; i < number_of_generations; ++i) {
         population.new_generation();
+        std::cout << "[ OK ] ___ generation ___ " << i + 1 << ";\n";
+        auto current_solution = population.solution(false);
+        if (best_makespan > current_solution) {
+            best_makespan = current_solution;
+            best_chromosome = population.population()[0];
+            best_solution_generation_number = i;
+        }
     }
-    auto x = population.solution();
-    std::cout << "Best makespan is " << x << std::endl;
+    std::cout << "Best makespan is " << best_makespan << std::endl;
+    std::cout << "Number of generations taken to obtain best makespan is " << best_solution_generation_number
+              << std::endl;
+    std::cout << "Chromosome that generated best makespan is: " << std::endl;
+    for (int i = 0; i < best_chromosome.get_size(); ++i)
+        std::cout << best_chromosome.get_genes()[i] << ' ';
+    std::cout << std::endl;
+    population.get_schedule().cost_function(best_chromosome, true);
+    std::cout << "Scheduled operations: \n";
+    for (const auto & v : population.get_schedule().get_array_of_scheduled_operations())
+        std::cout << v + 1 << ' ';
+    std::cout << std::endl;
+    std::cout << "their finish time, respectively: \n";
+    for (const auto & v : population.get_schedule().get_array_of_finish_times())
+        std::cout << v << ' ';
+    std::cout << std::endl;
 }
 
-void test_mt06() {
-    std::cout << "__ Genetic Algorithm started __" << std::endl;
-    std::ifstream file("../dataset.json");
-    json data_set;
-    if (file.is_open()) {
-        data_set = json::parse(file);
-        std::cout << "dataset.json successfully opened.\n";
-    }
-    file.close();
-    std::string description = data_set[0]["description"];
-    std::cout << description << std::endl;
-    std::vector<std::vector<int> > test_case = data_set[0]["data"];
-    size_t population_size = test_case.size() * test_case[0].size();
-    Population population = Population(population_size, 0.7, test_case);
-    std::vector<int> number_of_generations = {50, 100, 200, 300, 400};
-    std::vector<int> results;
-    for (const auto &v: number_of_generations) {
-        for (int i = 0; i < v; ++i) {
-            population.new_generation();
-        }
-        results.push_back(population.solution());
-    }
-    int generation_num;
-    int best_makespan = 100000000;
-    for (int i = 0; i < results.size(); ++i) {
-        if (results[i] < best_makespan) {
-            best_makespan = results[i];
-            generation_num = i;
-        }
-    }
-    std::cout << "Best makespan is " << best_makespan << " after " << number_of_generations[generation_num] << " generations." << std::endl;
-}

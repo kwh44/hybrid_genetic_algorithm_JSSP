@@ -32,9 +32,11 @@ public:
         for (const auto &v: population_array) v.~Chromosome();
     }
 
+    Schedule &get_schedule() { return _schedule; }
+
     void new_generation();
 
-    int solution();
+    int solution(bool);
 
     void display_population();
 
