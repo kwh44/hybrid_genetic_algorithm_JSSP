@@ -1,7 +1,7 @@
 # hybrid_genetic_algorithm_JSP
 <p>
 This project implements a hybrid genetic algorithm for the job scheduling problem
-<a href="http://mauricio.resende.info/doc/hgajss.pdf">link to paper</a>.<br/>
+<a href="https://github.com/kwh44/hybrid_genetic_algorithm_JSP/blob/master/A_hybrid_genetic_algorithm_for_the_job_shop_scheduling_problem.pdf">link to paper</a>.<br/>
 The project was developed under GNU/Linux 64-bit OS.
 <p>
 <h5> Requirements </h5>
