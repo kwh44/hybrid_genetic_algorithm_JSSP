@@ -7,7 +7,7 @@ The project was developed under GNU/Linux 64-bit OS.
 <h5> Requirements </h5>
 <ul>
     <li>CMake >= 3.0</li>
-    <li>make - a GNU compiler for C language</li>
+    <li>make >= 4.2.0</li>
     <li>C++ compiler supporting C++11 standard</li>
     <li>
     	JSON for Modern C++  3.2 or newer
