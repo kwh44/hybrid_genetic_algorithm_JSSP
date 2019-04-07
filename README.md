@@ -7,7 +7,7 @@ The project was developed under GNU/Linux 64-bit OS.
 <h5> Requirements </h5>
 <ul>
     <li>CMake >= 3.0</li>
-    <li>make >= 4.2.0</li>
+    <li>make - a GNU tool for generating executables</li>
     <li>C++ compiler supporting C++11 standard</li>
     <li>
     	JSON for Modern C++  3.2 or newer
@@ -19,7 +19,6 @@ The project was developed under GNU/Linux 64-bit OS.
     		 		cd json</li>
     		 <li>Build the library:<br/>
     		 mkdir build; cd build; cmake ../; make install</li>
-    		 <li>Say: "Thanks for this foolproof guide!"</li>
     	</ul>
     </li>
 </ul>
