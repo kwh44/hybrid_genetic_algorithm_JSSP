@@ -10,7 +10,7 @@
 
 class Population {
     std::vector<Chromosome> population_array;
-    int population_size = 0;
+    size_t population_size = 0;
     Schedule _schedule;
     // random number engine based on Mersenne Twister algorithm
     static std::mt19937_64 gen;
@@ -21,7 +21,7 @@ public:
 
     std::vector<Chromosome> &population() { return population_array; }
 
-    int size() const { return population_size; }
+    size_t size() const { return population_size; }
 
     explicit Population(size_t size, double prob_cross, std::vector<std::vector<int> > &data);
 
@@ -37,8 +37,6 @@ public:
     void new_generation();
 
     int solution(bool);
-
-    void display_population();
 
 private:
     void sort();

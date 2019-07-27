@@ -3,7 +3,6 @@
 //
 
 #include "Chromosome.h"
-#include "Population.h"
 #include <iostream>
 
 std::mt19937_64 Chromosome::gen = std::mt19937_64(20);

@@ -42,12 +42,6 @@ public:
 
     std::vector<int> &get_array_of_scheduled_operations() { return array_of_scheduled_operations; }
 
-    size_t job_number() { return number_of_jobs; }
-
-    size_t operations_number() { return number_of_operations_in_one_job; }
-
-    std::vector<Operation> &get_data() { return operations; }
-
 private:
     void construct_schedule(Chromosome &);
 
@@ -55,7 +49,7 @@ private:
 
     int get_highest_priority_operation(std::vector<int> &, Chromosome &);
 
-    int time_of_g_iteration(std::vector<int> &, int);
+    static int time_of_g_iteration(std::vector<int> &, int);
 
     void local_search(Chromosome &);
 
