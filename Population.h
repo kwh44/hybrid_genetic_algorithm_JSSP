@@ -27,11 +27,6 @@ public:
 
     Population &operator=(Population &&) noexcept;
 
-    ~Population() {
-        _schedule.~Schedule();
-        for (const auto &v: population_array) v.~Chromosome();
-    }
-
     Schedule &get_schedule() { return _schedule; }
 
     void new_generation();
@@ -40,6 +35,10 @@ public:
 
 private:
     void sort();
+
+#ifdef DDEBUG
+    void display_population();
+#endif
 };
 
 #endif //HYBRID_ALGORITHM_POPULATION_H

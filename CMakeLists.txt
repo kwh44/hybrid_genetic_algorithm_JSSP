@@ -12,6 +12,6 @@ add_executable(hybrid_algorithm main.cpp
         Schedule.cpp Schedule.h
         Chromosome.cpp Chromosome.h
         Population.cpp Population.h
-        Operation.h Operation.cpp)
+        Operation.h)
 
 target_link_libraries(hybrid_algorithm nlohmann_json::nlohmann_json)

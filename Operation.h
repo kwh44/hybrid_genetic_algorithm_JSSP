@@ -12,27 +12,29 @@ class Operation {
     int processing_time;
     int machine;
 public:
-    Operation(int, int, int, int);
+    Operation(int operation, int job, int time, int machine_required) : operation_number(operation),
+                                                                        job_number(job), processing_time(time),
+                                                                        machine(machine_required) {}
 
-    Operation();
+    Operation()  = default;
 
-    Operation(const Operation &);
+    Operation(const Operation &) = default;
 
-    Operation(Operation &);
+    Operation(Operation &)  = default;
 
-    Operation(Operation &&other) noexcept;
+    Operation(Operation &&other) noexcept  = default;
 
-    Operation &operator=(Operation &&) noexcept;
+    Operation &operator=(Operation &&) noexcept  = default;
 
     Operation &operator=(const Operation &other) = default;
 
-    int get_operation_number() const { return operation_number; }
+    inline int get_operation_number() const { return operation_number; }
 
-    int get_job_number() const { return job_number; }
+    inline int get_job_number() const { return job_number; }
 
-    int get_processing_time() const { return processing_time; }
+    inline int get_processing_time() const { return processing_time; }
 
-    int get_machine() const { return machine; }
+    inline int get_machine() const { return machine; }
 };
 
 

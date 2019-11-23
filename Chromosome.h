@@ -10,7 +10,7 @@
 #include <algorithm>
 
 class Chromosome {
-    int number_of_genes;
+    size_t number_of_genes;
     int max_dur;
     double probability_of_crossing = 0;
     std::vector<double> genes;
@@ -23,7 +23,7 @@ public:
         genes.reserve(number_of_genes);
     }
 
-    Chromosome(int, int, double);
+    Chromosome(size_t, int, double);
 
     Chromosome(const Chromosome &);
 
@@ -35,23 +35,21 @@ public:
 
     Chromosome &operator=(const Chromosome &other);
 
-    ~Chromosome() { genes.clear(); }
-
     static Chromosome cross(Chromosome &, Chromosome &);
 
-    int get_size() const { return number_of_genes; }
+    inline size_t get_size() const { return number_of_genes; }
 
-    std::vector<double> &get_genes() { return this->genes; }
+    inline std::vector<double> &get_genes() { return genes; }
 
-    int get_max_dur() const { return max_dur; }
+    inline  int get_max_dur() const { return max_dur; }
 
-    double get_prob_cross() const { return this->probability_of_crossing; }
+    inline double get_prob_cross() const { return probability_of_crossing; }
 
-    void set_number_of_genes(int value) { number_of_genes = value; }
+    inline void set_number_of_genes(int value) { number_of_genes = value; }
 
-    void set_max_dur(int value) { this->max_dur = value; }
+    inline  void set_max_dur(int value) { max_dur = value; }
 
-    void set_prob_cross(double value) { this->probability_of_crossing = value; }
+    inline  void set_prob_cross(double value) { probability_of_crossing = value; }
 
 };
 

@@ -20,21 +20,6 @@ Schedule::Schedule(std::vector<std::vector<int> > &data_set) {
     }
 }
 
-Schedule &Schedule::operator=(const Schedule &other) {
-    number_of_jobs = other.number_of_jobs;
-    number_of_operations_in_one_job = other.number_of_operations_in_one_job;
-    operations = other.operations;
-    return *this;
-}
-
-
-Schedule &Schedule::operator=(Schedule &&other) noexcept {
-    number_of_jobs = other.number_of_jobs;
-    number_of_operations_in_one_job = other.number_of_operations_in_one_job;
-    operations = other.operations;
-    return *this;
-}
-
 static int _max(std::vector<int> &);
 
 int Schedule::cost_function(Chromosome &one, bool show) {
@@ -132,18 +117,12 @@ void Schedule::local_search(Chromosome &one) {
 
 bool Schedule::evaluate_swap(Chromosome &one, std::vector<int> &F, std::vector<int> &S, int start, int end) {
     int old_make_span = 0, new_make_span = 0;
-    for (const auto &v: F) {
-        if (old_make_span < v) old_make_span = v;
-    }
+    for (const auto &v: F) if (old_make_span < v) old_make_span = v;
     F[start] = F[start] - operations[S[start]].get_processing_time() + operations[S[end]].get_processing_time();
     F[end] = F[start] + operations[S[start]].get_processing_time();
     std::swap(S[start], S[end]);
-    for (size_t i = start + 1; i < S.size(); ++i) {
-        _new_ef(S, F, i, one);
-    }
-    for (const auto &v : F) {
-        if (new_make_span < v) new_make_span = v;
-    }
+    for (size_t i = start + 1; i < S.size(); ++i) _new_ef(S, F, i, one);
+    for (const auto &v : F) if (new_make_span < v) new_make_span = v;
     return old_make_span > new_make_span;
 }
 
@@ -179,13 +158,10 @@ Schedule::update_E(std::vector<int> &E, std::vector<int> &S, std::vector<int> &F
         for (size_t r = 0; r < operations.size(); ++r) {
             if (r == i || operations[r].get_job_number() != operations[i].get_job_number()) continue;
             double priority_of_r_th_operation = chromo.get_genes()[operations[r].get_operation_number()];
-            if (priority_of_current_operation > priority_of_r_th_operation) {
-                predecessor_index_list.push_back(r);
-            }
+            if (priority_of_current_operation > priority_of_r_th_operation) predecessor_index_list.emplace_back(r);
         }
-        if (predecessor_index_list.empty()) /**/{
-            E.push_back(i);
-        } else {
+        if (predecessor_index_list.empty()) E.emplace_back(i);
+        else {
             status = true;
             for (const auto &v :predecessor_index_list) {
                 int index = -1, execution_time_of_zth_procedure;
@@ -206,9 +182,7 @@ Schedule::update_E(std::vector<int> &E, std::vector<int> &S, std::vector<int> &F
                     break;
                 }
             }
-            if (status) {
-                E.push_back(i);
-            }
+            if (status) E.emplace_back(i);
         }
     }
 }
@@ -242,7 +216,6 @@ int Schedule::precedence_capacity_earliest_finish_time(int index, std::vector<in
         }
         if (time_in_line < finish_time) time_in_line = finish_time;
     }
-
     for (size_t i = 0; i < S.size(); ++i) {
         if (operations[S[i]].get_machine() == operations[index].get_machine()) {
             if (time_in_line < F[i]) time_in_line = F[i];
@@ -254,9 +227,7 @@ int Schedule::precedence_capacity_earliest_finish_time(int index, std::vector<in
 int Schedule::time_of_g_iteration(std::vector<int> &F, int t) {
     int minimal_time = F[1];
     for (size_t i = 2; i < F.size(); ++i) {
-        if (minimal_time <= t && F[i] > t) {
-            minimal_time = F[i];
-        }
+        if (minimal_time <= t && F[i] > t) minimal_time = F[i];
     }
     return minimal_time;
 }
@@ -306,8 +277,11 @@ std::vector<int> Schedule::find_critical_path(std::vector<int> &F, std::vector<i
             return critical_path;
         }
     }
-    for (size_t i = 0; i < critical_path.size() / 2; ++i)
-        std::swap(critical_path[i], critical_path[critical_path.size() - i - 1]);
+    for (size_t i = 0; i < critical_path.size() / 2; ++i) {
+        auto temp = critical_path[i];
+        critical_path[i] = critical_path[critical_path.size() - i - 1];
+        critical_path[critical_path.size() - i - 1] = temp;
+    }
     return critical_path;
 }
 

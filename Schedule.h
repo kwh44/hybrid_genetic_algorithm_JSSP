@@ -24,17 +24,9 @@ public:
 
     explicit Schedule(std::vector<std::vector<int> > &data_set);
 
-    Schedule &operator=(const Schedule &);
+    Schedule &operator=(const Schedule &) = default;
 
-    Schedule &operator=(Schedule &&) noexcept;
-
-    ~Schedule() {
-        number_of_jobs = 0;
-        number_of_operations_in_one_job = 0;
-        array_of_finish_times.clear();
-        array_of_scheduled_operations.clear();
-        operations.clear();
-    }
+    Schedule &operator=(Schedule &&) noexcept = default;
 
     int cost_function(Chromosome &, bool);
 

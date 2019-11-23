@@ -10,26 +10,25 @@ static int _max(std::vector<std::vector<int> > &data);
 std::mt19937_64 Population::gen = std::mt19937_64(20);
 
 Population::Population(const Population &other) {
-    this->_schedule = other._schedule;
+    _schedule = other._schedule;
     population_array.clear();
-    for (int i = 0; i < other.population_size; ++i) population_array.push_back(other.population_array[i]);
-    this->population_size = other.population_size;
+    for (size_t i = 0; i < other.population_size; ++i) population_array.emplace_back(other.population_array[i]);
+    population_size = other.population_size;
 }
 
 Population::Population(size_t size, double prob_cross, std::vector<std::vector<int> > &data) {
-    this->_schedule = Schedule(data);
-    this->population_size = size;
-    this->population_array.reserve(size);
-    for (size_t i = 0; i < size; ++i) {
+    _schedule = Schedule(data);
+    population_size = size;
+    population_array.reserve(size);
+    for (size_t i = 0; i < size; ++i)
         population_array.emplace_back(Chromosome(data.size() * (data[0].size() / 2), _max(data), prob_cross));
-    }
 }
 
 Population &Population::operator=(Population &&other) noexcept {
-    this->_schedule = other._schedule;
+    _schedule = other._schedule;
     population_array.clear();
-    for (int i = 0; i < other.population_size; ++i) population_array.push_back(other.population_array[i]);
-    this->population_size = other.population_size;
+    for (int i = 0; i < other.population_size; ++i) population_array.emplace_back(other.population_array[i]);
+    population_size = other.population_size;
     return *this;
 }
 
@@ -47,7 +46,7 @@ static int _max(std::vector<std::vector<int> > &data) {
 
 void Population::new_generation() {
     std::vector<Chromosome> new_generation;
-    int n_percent = population_size * 0.05;
+    int n_percent = static_cast<int>(population_size * 0.05);
 
     sort();
     size_t i = 0;
@@ -63,11 +62,9 @@ void Population::new_generation() {
     for (; i < n_percent; ++i) {
         int parent_one_index = dist(Population::gen);
         int parent_two_index = dist(Population::gen);
-        while (parent_one_index == parent_two_index) {
-            parent_two_index = dist(Population::gen);
-        }
+        while (parent_one_index == parent_two_index) parent_two_index = dist(Population::gen);
         new_generation.emplace_back(
-                Chromosome::cross(this->population_array[parent_one_index], this->population_array[parent_two_index]));
+                Chromosome::cross(population_array[parent_one_index], population_array[parent_two_index]));
     }
     // one or more new members of the population are randomly generated
     // from the same distribution as the original population
@@ -78,32 +75,34 @@ void Population::new_generation() {
         new_generation.emplace_back(Chromosome(new_size, max_dur, prob_of_cross));
     }
     population_array.clear();
-    for (const auto &v:new_generation) population_array.push_back(v);
+    for (const auto &v:new_generation) population_array.emplace_back(v);
 }
 
 int Population::solution(bool show) {
-    auto return_value = this->_schedule.cost_function(population_array[0], show);
+    auto return_value = _schedule.cost_function(population_array[0], show);
     return return_value;
 }
 
+#ifdef DDEBUG
 void Population::display_population() {
-    for (int i = 0; i < size(); ++i) {
-        for (int j = 0; j < population_array[i].get_size(); ++j) {
+    for (size_t i = 0; i < size(); ++i) {
+        for (size_t j = 0; j < population_array[i].get_size(); ++j) {
             std::cout << population_array[i].get_genes()[j] << ' ';
         }
         std::cout << std::endl;
     }
     std::cout << std::endl;
 }
+#endif
 
 void Population::sort() {
-    std::vector<int> index_list;
-    for (int i = 0; i < population_size; ++i) index_list.push_back(i);
+    std::vector<size_t> index_list;
+    for (size_t i = 0; i < population_size; ++i) index_list.emplace_back(i);
     std::cout << " ";
     std::sort(index_list.begin(), index_list.end(),
               [&](int x, int y) {
-                  return this->_schedule.cost_function(population_array[x], false) <
-                         this->_schedule.cost_function(population_array[y], false);
+                  return _schedule.cost_function(population_array[x], false) <
+                         _schedule.cost_function(population_array[y], false);
               });
 
     for (size_t i = 0; i < index_list.size(); ++i) {
