@@ -55,7 +55,7 @@ void Population::new_generation() {
         new_generation.push_back(population_array[i]);
     }
     // parameterized uniform crossover
-    n_percent = population_size * 0.5;
+    n_percent = static_cast<int>(population_size * 0.5);
 
     std::uniform_int_distribution<> dist(0, population_size - 1);
 
@@ -98,13 +98,11 @@ void Population::display_population() {
 void Population::sort() {
     std::vector<size_t> index_list;
     for (size_t i = 0; i < population_size; ++i) index_list.emplace_back(i);
-    std::cout << " ";
     std::sort(index_list.begin(), index_list.end(),
-              [&](int x, int y) {
+              [&](auto &x, auto &y) {
                   return _schedule.cost_function(population_array[x], false) <
                          _schedule.cost_function(population_array[y], false);
               });
-
     for (size_t i = 0; i < index_list.size(); ++i) {
         auto temp = population_array[i];
         population_array[i] = population_array[index_list[i]];
