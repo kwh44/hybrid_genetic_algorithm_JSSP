@@ -1,4 +1,4 @@
-# hybrid_genetic_algorithm_JSP
+# Hybrid genetic algorithm for job shop scheduling problem
 <p>
 This project implements a hybrid genetic algorithm for the job scheduling problem
 <a href="https://github.com/kwh44/hybrid_genetic_algorithm_JSP/blob/master/A_hybrid_genetic_algorithm_for_the_job_shop_scheduling_problem.pdf">link to paper</a>.<br/>
