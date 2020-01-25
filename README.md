@@ -2,7 +2,6 @@
 
 This project implements a hybrid genetic algorithm for the job scheduling problem
 [link to paper](https://github.com/kwh44/hybrid_genetic_algorithm_JSP/blob/master/A_hybrid_genetic_algorithm_for_the_job_shop_scheduling_problem.pdf)  
-
 The project was developed under GNU/Linux 64-bit OS.
 
 #### Requirements
