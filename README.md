@@ -20,10 +20,10 @@ The project was developed under GNU/Linux 64-bit OS.
     ```
     - Build the library
     ```bash 
-       $ mkdir build
-       $ cd build
-       $ cmake ../
-       $ make install
+    $ mkdir build
+    $ cd build
+    $ cmake ../
+    $ make install
      ```
 #### How to build the project
 ```bash
