@@ -12,11 +12,11 @@ The project was developed under GNU/Linux 64-bit OS.
     - Short guide how to install this library on linux machine:
     - Clone repository:
     ```bash
-    git clone https://github.com/nlohmann/json
+    $ git clone https://github.com/nlohmann/json
     ```
     - Change your working directory:
     ```bash
-    cd json
+    $ cd json
     ```
     - Build the library
     ```bash 
